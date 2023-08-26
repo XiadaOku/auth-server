@@ -27,14 +27,14 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   }
 
   async createLocalIfNot(username: string, password: string) {
-    var local = await this.prismaService.local.findFirst({
+    var local = await this.prismaService.authLocal.findFirst({
       where: {
         userId: username
       }
     })
 
     if (!local) {
-      local = await this.prismaService.local.create({
+      local = await this.prismaService.authLocal.create({
         data: {
           userId: username,
           password: await this.authService.hash(password)

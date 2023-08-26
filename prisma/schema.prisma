@@ -8,23 +8,23 @@ datasource db {
 }
 
 
-model user {
+model authUser {
   id              String        @id @default(cuid())
   refreshToken    String?
-  tokens          token[]
-  local           local?
+  tokens          authToken[]
+  local           authLocal?
 }
 
-model local {
+model authLocal {
   id              String        @id @default(cuid())
   password        String
   userId          String        @unique
-  user            user          @relation(fields: [userId], references: [id])
+  user            authUser      @relation(fields: [userId], references: [id])
 }
 
-model token {
+model authToken {
   id              String        @id @default(cuid())
   token           String
   userId          String
-  user            user          @relation(fields: [userId], references: [id])
+  user            authUser      @relation(fields: [userId], references: [id])
 }

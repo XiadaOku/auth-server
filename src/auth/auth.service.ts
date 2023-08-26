@@ -35,7 +35,7 @@ export class AuthService {
   }
 
   async updateTokens(userId: string, access_token: string, refresh_token: string) {
-    await this.prismaService.token.create({
+    await this.prismaService.authToken.create({
       data: {
         userId: userId,
         token: access_token
@@ -43,7 +43,7 @@ export class AuthService {
     });
 
     const token = await this.hash(refresh_token);
-    await this.prismaService.user.update({
+    await this.prismaService.authUser.update({
       where: {
         id: userId
       },
@@ -54,12 +54,12 @@ export class AuthService {
   }
 
   async createUserIfNot(userId: string) {
-    await this.prismaService.user.findFirstOrThrow({ 
+    await this.prismaService.authUser.findFirstOrThrow({ 
       where: { 
         id: userId 
       } 
     }).catch(async e => {
-      await this.prismaService.user.create({ 
+      await this.prismaService.authUser.create({ 
         data: {
           id: userId,
           refreshToken: null
@@ -77,7 +77,7 @@ export class AuthService {
   }
 
   async logout(userId: string) {
-    await this.prismaService.user.update({
+    await this.prismaService.authUser.update({
       where: {
         id: userId
       },
@@ -88,7 +88,7 @@ export class AuthService {
   }
 
   async refreshTokens(userId: string, refreshToken: string) {
-    const user = await this.prismaService.user.findFirst({
+    const user = await this.prismaService.authUser.findFirst({
       where: {
         id: userId
       }
