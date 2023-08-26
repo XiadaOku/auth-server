@@ -53,4 +53,10 @@ export class AppController {
   async vkCallback(@Req() req) {
     return await req.user;
   }
+
+  @UseGuards(AccessTokenGuard)
+  @Get('user')
+  async getUser(@Req() req) {
+    return await req.user['sub'];
+  }
 }
